@@ -19,12 +19,14 @@ app.get('/', function (req, res, next) {
       // 剩下就都是 jquery 的内容了
       var $ = cheerio.load(sres.text);
       var items = [];
-      $('#topic_list .topic_title').each(function (idx, element) {
+      $('#topic_list .cell').each(function (idx, element) {
         var $element = $(element);
-        items.push({
-          title: $element.attr('title'),
-          href: $element.attr('href')
-        });
+        var cellEle = {}
+        cellEle.title = $element.find('.topic_title').attr('title')
+        cellEle.href = $element.find('.topic_title').attr('href')
+        var str = $element.find('.user_avatar').attr('href')
+        cellEle.author = str.substring(str.lastIndexOf("/")+1);
+        items.push(cellEle);
       });
 
       res.send(items);
